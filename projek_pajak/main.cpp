@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <string> // Jangan lupa include string
+#include <string> 
 using namespace std;
 
 // Struktur untuk menyimpan data kendaraan
@@ -15,7 +15,7 @@ struct Kendaraan {
     int swdkllj;
     int total;
     bool status = false; // Default: belum membayar pajak
-    string invoice_id;   // Tambahkan member untuk Invoice ID
+    string invoice_id;  
 };
 
 // Daftar kendaraan (sebagai database sementara)
@@ -186,7 +186,7 @@ void perbarui_status() {
             daftar_kendaraan[i].status = true;
             daftar_kendaraan[i].invoice_id = invoice_id;
             cout << "Status pajak kendaraan dengan plat " << plat_update << " telah diperbarui menjadi 'Sudah membayar pajak' dengan Invoice ID: " << invoice_id << ".\n";
-            cout << "Data anda akan diproses 7×24 jam kerja";
+            cout << "Data anda akan diproses 7Ã—24 jam kerja";
             cout << "Terimakasih sudah membayar pajak";
             ditemukan = true;
             break;
