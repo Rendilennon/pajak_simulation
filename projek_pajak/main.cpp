@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <string> // Jangan lupa include string
+#include <string>
 using namespace std;
 
 // Struktur untuk menyimpan data kendaraan
@@ -15,7 +15,7 @@ struct Kendaraan {
     int swdkllj;
     int total;
     bool status = false; // Default: belum membayar pajak
-    string invoice_id;   // Tambahkan member untuk Invoice ID
+    string invoice_id;    // Tambahkan member untuk Invoice ID
 };
 
 // Daftar kendaraan (sebagai database sementara)
@@ -23,36 +23,39 @@ vector<Kendaraan> daftar_kendaraan;
 
 // Fungsi untuk menghitung pajak dan simpan data
 void tambahkan_data() {
-    Kendaraan k;
+    // Alokasikan memori untuk objek Kendaraan menggunakan pointer
+    Kendaraan* k = new Kendaraan;
 
     cout << "Masukkan nama pemilik:  ";
     cin.ignore();
-    getline(cin, k.nama);
+    getline(cin, k->nama); // Gunakan -> untuk mengakses member melalui pointer
 
     cout << "Masukkan plat nomor: ";
-    getline(cin, k.plat);
+    getline(cin, k->plat);
 
     cout << "Masukkan jenis kendaraan (mobil/motor): ";
-    getline(cin, k.jenis);
+    getline(cin, k->jenis);
 
     cout << "Masukkan tahun kendaraan: ";
-    cin >> k.tahun;
+    cin >> k->tahun;
 
     cout << "Masukkan harga kendaraan: ";
-    cin >> k.harga;
+    cin >> k->harga;
 
     // Hitung pajak
-    k.pkb = k.harga * 12 / 1000;
-    k.bbnkb = k.harga * 12 / 100;
-    k.swdkllj = 34000;
-    k.total = k.pkb + k.bbnkb + k.swdkllj;
+    k->pkb = k->harga * 12 / 1000;
+    k->bbnkb = k->harga * 12 / 100;
+    k->swdkllj = 34000;
+    k->total = k->pkb + k->bbnkb + k->swdkllj;
 
     // Status default: false (belum membayar pajak)
-    k.status = false;
-    k.invoice_id = ""; // Inisialisasi invoice_id
+    k->status = false;
+    k->invoice_id = ""; // Inisialisasi invoice_id
 
-    // Simpan data
-    daftar_kendaraan.push_back(k);
+    // Simpan alamat memori (pointer) ke dalam vector
+    daftar_kendaraan.push_back(*k); // Kita dereference pointer saat memasukkan ke vector
+    delete k; // Penting untuk membebaskan memori yang dialokasikan dengan new
+    k = nullptr; // Praktik yang baik untuk mengatur pointer menjadi nullptr setelah dihapus
 
     cout << "Data berhasil ditambahkan!\n";
 }
@@ -65,16 +68,16 @@ void lihat_semua_data() {
     }
 
     cout << "\n=== DAFTAR KENDARAAN ===\n";
-    for (size_t i = 0; i < daftar_kendaraan.size(); i++) { // Gunakan size_t untuk loop
-        Kendaraan k = daftar_kendaraan[i];
-        cout << i + 1 << ". Nama: " << k.nama
-             << ", Plat: " << k.plat
-             << ", Jenis: " << k.jenis
-             << ", Tahun: " << k.tahun
-             << ", Pajak: " << k.total
-             << ", Status: " << (k.status ? "Sudah membayar pajak" : "Belum membayar pajak");
-        if (!k.invoice_id.empty()) { // Tambahkan pengecekan apakah invoice_id tidak kosong
-            cout << ", Invoice ID: " << k.invoice_id;
+    for (size_t i = 0; i < daftar_kendaraan.size(); i++) {
+        Kendaraan* k = &daftar_kendaraan[i]; // Dapatkan alamat memori elemen vector
+        cout << i + 1 << ". Nama: " << k->nama
+             << ", Plat: " << k->plat
+             << ", Jenis: " << k->jenis
+             << ", Tahun: " << k->tahun
+             << ", Pajak: " << k->total
+             << ", Status: " << (k->status ? "Sudah membayar pajak" : "Belum membayar pajak");
+        if (!k->invoice_id.empty()) {
+            cout << ", Invoice ID: " << k->invoice_id;
         }
         cout << endl;
     }
@@ -93,17 +96,18 @@ void cari_data() {
     getline(cin, cari_plat);
 
     bool ditemukan = false;
-    for (auto &k : daftar_kendaraan) {
-        if (k.plat == cari_plat) {
+    for (auto& k_ref : daftar_kendaraan) {
+        Kendaraan* k = &k_ref; // Dapatkan alamat memori elemen vector
+        if (k->plat == cari_plat) {
             cout << "\nData ditemukan:\n";
-            cout << "Nama: \n" << k.nama
-                 << "\nPlat: \n" << k.plat
-                 << "\nJenis: \n" << k.jenis
-                 << "\nTahun: \n" << k.tahun
-                 << "\nTotal Pajak: \n" << k.total
-                 << "\nStatus: \n" << (k.status ? "Sudah membayar pajak" : "Belum membayar pajak");
-            if (!k.invoice_id.empty()) { // Tambahkan pengecekan apakah invoice_id tidak kosong
-                cout << "\nInvoice ID: " << k.invoice_id;
+            cout << "Nama: " << k->nama
+                 << "\nPlat: " << k->plat
+                 << "\nJenis: " << k->jenis
+                 << "\nTahun: " << k->tahun
+                 << "\nTotal Pajak: " << k->total
+                 << "\nStatus: " << (k->status ? "Sudah membayar pajak" : "Belum membayar pajak");
+            if (!k->invoice_id.empty()) {
+                cout << "\nInvoice ID: " << k->invoice_id;
             }
             cout << endl;
             ditemukan = true;
@@ -128,7 +132,7 @@ void hapus_data() {
     cin.ignore();
     getline(cin, plat_hapus);
 
-    for (size_t i = 0; i < daftar_kendaraan.size(); i++) { // Gunakan size_t untuk loop
+    for (size_t i = 0; i < daftar_kendaraan.size(); i++) {
         if (daftar_kendaraan[i].plat == plat_hapus) {
             daftar_kendaraan.erase(daftar_kendaraan.begin() + i);
             cout << "Data berhasil dihapus.\n";
@@ -182,12 +186,13 @@ void perbarui_status() {
 
     bool ditemukan = false;
     for (int i = 0; i < daftar_kendaraan.size(); ++i) {
-        if (daftar_kendaraan[i].plat == plat_update) {
-            daftar_kendaraan[i].status = true;
-            daftar_kendaraan[i].invoice_id = invoice_id;
+        Kendaraan* k = &daftar_kendaraan[i]; // Dapatkan alamat memori elemen vector
+        if (k->plat == plat_update) {
+            k->status = true;
+            k->invoice_id = invoice_id;
             cout << "Status pajak kendaraan dengan plat " << plat_update << " telah diperbarui menjadi 'Sudah membayar pajak' dengan Invoice ID: " << invoice_id << ".\n";
-            cout << "Data anda akan diproses 7×24 jam kerja";
-            cout << "Terimakasih sudah membayar pajak";
+            cout << "Data anda akan diproses 7×24 jam kerja\n";
+            cout << "Terimakasih sudah membayar pajak\n";
             ditemukan = true;
             break;
         }
@@ -235,4 +240,6 @@ int main() {
                 cout << "Pilihan tidak valid. Coba lagi.\n";
         }
     } while (pilihan != 6);
+
+    return 0;
 }
