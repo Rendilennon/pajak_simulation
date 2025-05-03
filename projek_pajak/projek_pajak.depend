@@ -1,4 +1,6 @@
 # depslib dependency file v1.0
-1745327206 source:c:\users\asus\onedrive\documents\ngampuss\ngoding\projek pajak\projek_pajak\main.cpp
+1746276954 source:c:\users\asus\onedrive\documents\ngampuss\ngoding\projek pajak\projek_pajak\main.cpp
 	<iostream>
+	<vector>
+	<string>
 

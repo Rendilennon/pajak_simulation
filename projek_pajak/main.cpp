@@ -26,7 +26,7 @@ void tambahkan_data() {
     // Alokasikan memori untuk objek Kendaraan menggunakan pointer
     Kendaraan* k = new Kendaraan;
 
-    cout << "Masukkan nama pemilik:  ";
+    cout << "Masukkan nama pemilik: \n";
     cin.ignore();
     getline(cin, k->nama); // Gunakan -> untuk mengakses member melalui pointer
 
@@ -43,10 +43,9 @@ void tambahkan_data() {
     cin >> k->harga;
 
     // Hitung pajak
-    k->pkb = k->harga * 12 / 1000;
-    k->bbnkb = k->harga * 12 / 100;
-    k->swdkllj = 34000;
-    k->total = k->pkb + k->bbnkb + k->swdkllj;
+    k->pkb = k->harga * 0.012;
+    k->swdkllj = 35000;
+    k->total = k->pkb + k->swdkllj;
 
     // Status default: false (belum membayar pajak)
     k->status = false;
