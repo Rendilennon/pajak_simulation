@@ -26,9 +26,9 @@ void tambahkan_data() {
     // Alokasikan memori untuk objek Kendaraan menggunakan pointer
     Kendaraan* k = new Kendaraan;
 
-    cout << "Masukkan nama pemilik: \n";
-    cin.ignore();
-    getline(cin, k->nama); // Gunakan -> untuk mengakses member melalui pointer
+    cout << "Masukkan nama pemilik: ";
+    cin.ignore(); // Membersihkan buffer jika ada newline tertinggal dari input menu sebelumnya
+    getline(cin, k->nama);
 
     cout << "Masukkan plat nomor: ";
     getline(cin, k->plat);
@@ -38,9 +38,11 @@ void tambahkan_data() {
 
     cout << "Masukkan tahun kendaraan: ";
     cin >> k->tahun;
+    cin.ignore(); // Membersihkan buffer setelah input angka
 
     cout << "Masukkan harga kendaraan: ";
     cin >> k->harga;
+    cin.ignore(); // Membersihkan buffer setelah input angka
 
     // Hitung pajak
     k->pkb = k->harga * 0.012;
@@ -54,7 +56,7 @@ void tambahkan_data() {
     // Simpan alamat memori (pointer) ke dalam vector
     daftar_kendaraan.push_back(*k); // Kita dereference pointer saat memasukkan ke vector
     delete k; // Penting untuk membebaskan memori yang dialokasikan dengan new
-    k = nullptr; // Praktik yang baik untuk mengatur pointer menjadi nullptr setelah dihapus
+    k = nullptr;
 
     cout << "Data berhasil ditambahkan!\n";
 }
@@ -164,6 +166,7 @@ void perbarui_status() {
         cout << "3.Briva (Bri virtual account) \n";
         cout << "4.BCA \n";
         cin >> metode_pembayaran;
+        cin.ignore(); // Membersihkan buffer setelah input angka
 
         switch (metode_pembayaran) {
             case 1:
@@ -190,7 +193,7 @@ void perbarui_status() {
             k->status = true;
             k->invoice_id = invoice_id;
             cout << "Status pajak kendaraan dengan plat " << plat_update << " telah diperbarui menjadi 'Sudah membayar pajak' dengan Invoice ID: " << invoice_id << ".\n";
-            cout << "Data anda akan diproses 7×24 jam kerja\n";
+            cout << "Data anda akan diproses 7Ã—24 jam kerja\n";
             cout << "Terimakasih sudah membayar pajak\n";
             ditemukan = true;
             break;
@@ -215,6 +218,7 @@ int main() {
         cout << "6. Keluar\n";
         cout << "Pilih menu: ";
         cin >> pilihan;
+        cin.ignore(); // Membersihkan buffer setelah input angka di menu
 
         switch (pilihan) {
             case 1:
