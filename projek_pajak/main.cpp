@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <stdlib.h>
+#include <stdio.h>
 using namespace std;
 
 // Struktur untuk menyimpan data kendaraan
@@ -27,7 +29,7 @@ void tambahkan_data() {
     Kendaraan* k = new Kendaraan;
 
     cout << "Masukkan nama pemilik: ";
-    cin.ignore(); // Membersihkan buffer jika ada newline tertinggal dari input menu sebelumnya
+    cin.ignore();
     getline(cin, k->nama);
 
     cout << "Masukkan plat nomor: ";
@@ -38,16 +40,28 @@ void tambahkan_data() {
 
     cout << "Masukkan tahun kendaraan: ";
     cin >> k->tahun;
-    cin.ignore(); // Membersihkan buffer setelah input angka
+    cin.ignore();
 
     cout << "Masukkan harga kendaraan: ";
     cin >> k->harga;
-    cin.ignore(); // Membersihkan buffer setelah input angka
+    cin.ignore();
 
-    // Hitung pajak
-    k->pkb = k->harga * 0.012;
-    k->swdkllj = 35000;
-    k->total = k->pkb + k->swdkllj;
+    if (k->jenis == "motor") {
+        // Hitung pajak motor
+        k->pkb = k->harga * 0.012;
+        k->swdkllj = 35000;
+        k->total = k->pkb + k->swdkllj;
+    } else if (k->jenis == "mobil") {
+        // Hitung pajak mobil
+        k->pkb = k->harga * 0.012;
+        k->swdkllj = 140000;
+        k->total = k->pkb + k->swdkllj;
+    } else {
+        cout << "Jenis kendaraan tidak valid!" << endl;
+        delete k; // untuk membebaskan memori jika input tidak valid
+        k = nullptr;
+        return; // Keluar dari fungsi jika jenis kendaraan tidak valid
+    }
 
     // Status default: false (belum membayar pajak)
     k->status = false;
@@ -70,7 +84,7 @@ void lihat_semua_data() {
 
     cout << "\n=== DAFTAR KENDARAAN ===\n";
     for (size_t i = 0; i < daftar_kendaraan.size(); i++) {
-        Kendaraan* k = &daftar_kendaraan[i]; // Dapatkan alamat memori elemen vector
+        Kendaraan* k = &daftar_kendaraan[i];
         cout << i + 1 << ". Nama: " << k->nama
              << ", Plat: " << k->plat
              << ", Jenis: " << k->jenis
